@@ -9,7 +9,7 @@ env:
   PROSODY_VERSION: "0.12.4"
 
 jobs:
-  build-and-push-image:
+  build-image:
     runs-on: ubuntu-latest
 
     permissions:
