@@ -26,7 +26,9 @@ ARG PROSODY_VERSION
 ARG LUA_VERSION
 
 # add tooling required for build
-RUN apt-get update && apt-get install -y mercurial build-essential bsdmainutils
+RUN apt-get update \
+ && apt-get install -y mercurial build-essential bsdmainutils \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /build
 
@@ -40,7 +42,8 @@ RUN ./configure \
       --libdir=/opt/prosody/lib \
       --sysconfdir=/etc/prosody \
       --datadir=/var/lib/prosody \
-      --lua-version=${LUA_VERSION}
+      --lua-version=${LUA_VERSION} \
+      --no-example-certs
 
 RUN make
 RUN make install
@@ -62,8 +65,16 @@ COPY --from=builder /build/install.tar /build/
 
 RUN tar -xf /build/install.tar -C / \
  && rm -rf /build \
- && useradd -d /opt/prosody --system --user-group prosody \
- && chown -R prosody:prosody /var/lib/prosody
+ && groupadd -g 1000 prosody \
+ && useradd -u 1000 -d /opt/prosody --system -g 1000 prosody \
+ && mkdir -p /usr/lib/prosody/enabled-modules/ \
+ && mkdir -p /var/lib/prosody/custom_plugins \
+ && chown -R prosody:prosody \
+          /var/lib/prosody \
+          /usr/lib/prosody/enabled-modules/ \
+          /var/lib/prosody/custom_plugins
+
+VOLUME [ "/var/lib/prosody" ]
 
 USER prosody
 
