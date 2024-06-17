@@ -11,14 +11,14 @@ It contains:
 
 ## Initialization Scripts
 
+> [!IMPORTANT]
+> Scripts are run with the user the container starts with.
+> The default user is the non-root user `prosody`
+
 Container configuration can be customized using initialization scripts mounted to `/entrypoint.d/`. Scripts in this directory will be executed when launching the container.
 
 This can for example be used for installing prosody modules using `prosodyctl install`.
 
-
-> [!IMPORTANT]
-> Scripts are run with the user the container starts with.
-> The default user is the non-root user `prosody`
 
 
 ## Volume Mounts
