@@ -44,7 +44,6 @@ Start and manage prosody using the following commands:
 
 
 ```bash
-# Starting the server
 docker run \
  --name prosody \
  -v data/:var/lib/prosody/ \
@@ -55,8 +54,9 @@ docker run \
 
 ### Managing the server
 
+Use `docker exec` to run commands inside the container.
+
 ```bash
-# using prosodyctl, e.g. status
 docker exec prosody prosodyctl status
 
 ```
