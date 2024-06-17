@@ -20,17 +20,17 @@ Container configuration can be customized using initialization scripts mounted t
 This can for example be used for installing prosody modules using `prosodyctl install`.
 
 
-
 ## Volume Mounts
 
 > [!TIP]
 > Mount your prosody modules into the directory specified in your Prosody configuration to speed up your startup.
 
 
-| Mount Directory     | Description                   |
-| ---                 | ---                           |
-| `/entrypoint.d/`    | Initialization shell scripts  |
-| `/var/lib/prosody/` | Prosody data directory        |
+| Mount Directory     | Description                       |
+| ---                 | ---                               |
+| `/entrypoint.d/`    | Initialization shell scripts      |
+| `/var/lib/prosody/` | Prosody data directory            |
+| `/etc/prosody/`     | Prosody configuration directory   |
 
 
 ## Usage
@@ -40,14 +40,17 @@ Start and manage prosody using the following commands:
 ### Running the server
 
 > [!IMPORTANT]
-> Mount your prosody configuration file `prosody.cfg.lua` onto `/etc/prosody/prosody.cfg.lua`.
+> Adjust the volume mounts according to your system setup.
 
 
 ```bash
 docker run \
  --name prosody \
- -v data/:var/lib/prosody/ \
- -v config/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro \
+ -P \
+ -v ./config/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro \
+ -v [DATA_DIRECTORY]/:var/lib/prosody/ \
+ -v /etc/letsencrypt/live/:/etc/letsencrypt/live/:ro \
+ --restart=unless-stopped \
  ghcr.io/error418/prosody:0.12.4
 
 ```
@@ -60,3 +63,17 @@ Use `docker exec` to run commands inside the container.
 docker exec prosody prosodyctl status
 
 ```
+
+### Let's Encrypt
+
+Add the following renewal hook to letsencrypt: 
+
+`/etc/letsencrypt/renewal-hooks/deploy/prosody.sh`
+
+```bash
+#!/bin/sh
+
+docker exec -u0 prosody prosodyctl --root cert import /etc/letsencrypt/live
+```
+
+The certbot directory `/etc/letsencrypt/live` needs to be mounted in the running container.
