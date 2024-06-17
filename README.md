@@ -60,5 +60,3 @@ Use `docker exec` to run commands inside the container.
 docker exec prosody prosodyctl status
 
 ```
-
-
