@@ -13,10 +13,8 @@ It contains:
 
 Container configuration can be customized using initialization scripts mounted to `/entrypoint.d/`. Scripts in this directory will be executed when launching the container.
 
-This can be for example used for:
+This can for example be used for installing prosody modules using `prosodyctl install`.
 
-* Adding custom CA certificates
-* Installing prosody modules using `prosodyctl install`
 
 > [!IMPORTANT]
 > Scripts are run with the user the container starts with.
@@ -59,7 +57,7 @@ docker run \
 
 ```bash
 # using prosodyctl, e.g. status
-docker exec prosodyctl status
+docker exec prosody prosodyctl status
 
 ```
 
