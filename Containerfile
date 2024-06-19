@@ -65,8 +65,8 @@ COPY --from=builder /build/install.tar /build/
 
 RUN tar -xf /build/install.tar -C / \
  && rm -rf /build \
- && groupadd -g 1000 prosody \
- && useradd -u 1000 -d /opt/prosody --system -g 1000 prosody \
+ && groupadd -g 5222 prosody \
+ && useradd -u 5222 -d /opt/prosody --system -g 5222 prosody \
  && mkdir -p /usr/lib/prosody/enabled-modules/ \
  && mkdir -p /var/lib/prosody/custom_plugins \
  && chown -R prosody:prosody \
@@ -83,4 +83,4 @@ WORKDIR /opt/prosody
 EXPOSE 5000 5222 5269 5281
 
 ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "prosody" ]
+CMD [ "prosody", "-F" ]

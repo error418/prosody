@@ -37,23 +37,59 @@ This can for example be used for installing prosody modules using `prosodyctl in
 
 Start and manage prosody using the following commands:
 
+
 ### Running the server
+
+#### Preparations
+
+> [!NOTICE]
+> You will need to follow the actions below in order to be able to run the container rootless.
+
+Add a user to your host system with the user id `5222` named `prosody` for your volume
+mounts.
+
+```bash
+groupadd -g 5222 prosody
+useradd -u 5222 --system -M -g 5222 prosody
+
+# create prosody config directory (optional)
+mkdir -p /etc/prosody
+chown -R root:prosody /etc/prosody
+
+# create prosody data directory (optional)
+mkdir -p /var/lib/prosody
+chown -R prosody:prosody /var/lib/prosody
+
+```
+
+#### Environment Variables
+
+Following environment variables can be used to configure the container
+
+| Environment Variable | Description |
+| --- | --- |
+| `PROSODY_EXTRA_MODULES` | Space-separated list of Prosody modules to install on container startup using `prosodyctl install` |
+
+
+#### Image startup
 
 > [!IMPORTANT]
 > Adjust the volume mounts according to your system setup.
 
 
 ```bash
-docker run \
+docker run -d \
  --name prosody \
  -P \
- -v ./config/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro \
- -v [DATA_DIRECTORY]/:var/lib/prosody/ \
+ -v /etc/prosody/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro \
+ -v /var/lib/prosody/:var/lib/prosody/ \
  -v /etc/letsencrypt/live/:/etc/letsencrypt/live/:ro \
+ -e PROSODY_EXTRA_MODULES='mod_http_server mod_cloud_notify mod_vcard_muc' \
  --restart=unless-stopped \
  ghcr.io/error418/prosody:0.12.4
 
 ```
+
 
 ### Managing the server
 
