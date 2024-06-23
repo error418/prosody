@@ -78,13 +78,15 @@ RUN tar -xf /build/install.tar -C / \
           /usr/lib/prosody/enabled-modules/ \
           /var/lib/prosody/custom_plugins
 
-VOLUME [ "/var/lib/prosody" ]
+VOLUME [ "/var/lib/prosody", "/etc/prosody" ]
 
 USER prosody
 
 WORKDIR /opt/prosody
 
-EXPOSE 5000 5222 5269 5281
+EXPOSE 5000/tcp
+EXPOSE 5222/tcp
+EXPOSE 5281/tcp
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "prosody", "-F" ]
