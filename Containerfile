@@ -1,7 +1,8 @@
 ARG PROSODY_VERSION=0.12.4
 ARG LUA_VERSION=5.4
 ARG BASE_IMAGE=debian:bookworm-slim
-
+ARG USERID=5222
+ARG GROUPID=${USERID}
 
 ###############################################################################
 # Base image
@@ -58,6 +59,9 @@ RUN tar -cf /build/install.tar /opt/ /etc/prosody/ /var/lib/prosody
 
 FROM base
 
+ARG USERID
+ARG GROUPID
+
 ENV PATH=/opt/prosody/bin:$PATH
 
 COPY rootfs/ /
@@ -65,8 +69,8 @@ COPY --from=builder /build/install.tar /build/
 
 RUN tar -xf /build/install.tar -C / \
  && rm -rf /build \
- && groupadd -g 5222 prosody \
- && useradd -u 5222 -d /opt/prosody --system -g 5222 prosody \
+ && groupadd -g ${GROUPID} prosody \
+ && useradd -u ${USERID} -d /opt/prosody --system -g ${GROUPID} prosody \
  && mkdir -p /usr/lib/prosody/enabled-modules/ \
  && mkdir -p /var/lib/prosody/custom_plugins \
  && chown -R prosody:prosody \
