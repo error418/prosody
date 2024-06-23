@@ -80,10 +80,15 @@ Following environment variables can be used to configure the container
 ```bash
 docker run -d \
  --name prosody \
- -P \
+ -p 5000:5000/tcp \
+ -p 5222:5222/tcp \
+ -p 5269:5269/tcp \
+ -p 127.0.0.1:5280:5280/tcp \
+ -p 5281:5281/tcp \
  -v /etc/prosody/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro \
  -v /var/lib/prosody/:var/lib/prosody/ \
  -v /etc/letsencrypt/live/:/etc/letsencrypt/live/:ro \
+ -v /etc/letsencrypt/archive/:/etc/letsencrypt/archive/:ro \
  -e PROSODY_EXTRA_MODULES='mod_http_server mod_cloud_notify mod_vcard_muc' \
  --restart=unless-stopped \
  ghcr.io/error418/prosody:0.12.4
@@ -113,3 +118,8 @@ docker exec -u0 prosody prosodyctl --root cert import /etc/letsencrypt/live
 ```
 
 The certbot directory `/etc/letsencrypt/live` needs to be mounted in the running container.
+
+
+> [!NOTICE]
+> When starting the server it might be useful to run the above command after prosody container startup to
+> initialize the certificate stores.
