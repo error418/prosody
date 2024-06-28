@@ -42,7 +42,7 @@ Start and manage prosody using the following commands:
 
 #### Preparations
 
-> [!NOTICE]
+> [!NOTE]
 > You will need to follow the actions below in order to be able to run the container rootless.
 
 Add a user to your host system with the user id `5222` named `prosody` for your volume
@@ -120,6 +120,6 @@ docker exec -u0 prosody prosodyctl --root cert import /etc/letsencrypt/live
 The certbot directory `/etc/letsencrypt/live` needs to be mounted in the running container.
 
 
-> [!NOTICE]
+> [!NOTE]
 > When starting the server it might be useful to run the above command after prosody container startup to
 > initialize the certificate stores.
