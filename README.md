@@ -91,7 +91,7 @@ docker run -d \
  -v /etc/letsencrypt/archive/:/etc/letsencrypt/archive/:ro \
  -e PROSODY_EXTRA_MODULES='mod_http_server mod_cloud_notify mod_vcard_muc' \
  --restart=unless-stopped \
- ghcr.io/error418/prosody:0.12.4
+ ghcr.io/error418/prosody:0.12.5
 
 ```
 
